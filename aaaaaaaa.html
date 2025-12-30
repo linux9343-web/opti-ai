@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opti | AI-Native IAM Platform</title>
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts: DM Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Fontshare CDN for Clash Display (Matches Clash Grotesk style) -->
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-beige: #e8dfd1;
+            --hero-orange: #e59832;
+            --text-dark: #131132;
+            --text-grey: #666666;
+            --accent-blue: #0c39c8;
+            --card-white: #ffffff;
+            --border-color: rgba(19, 17, 50, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            color: var(--text-dark);
+            line-height: 1.5;
+            background-color: var(--bg-beige);
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Clash Display', sans-serif;
+            font-weight: 500;
+        }
+
+        a { text-decoration: none; color: inherit; transition: opacity 0.2s; }
+        ul { list-style: none; }
+        
+        /* --- UTILITIES --- */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        /* The dark button used in the orange section */
+        .btn-primary {
+            background-color: var(--text-dark);
+            color: #fff;
+            border: 1px solid var(--text-dark);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
+        /* Outline button for orange section */
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--text-dark);
+            color: var(--text-dark);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(19, 17, 50, 0.05);
+        }
+
+        /* --- HEADER --- */
+        header {
+            position: sticky;
+            top: 0;
+            /* Matches the orange background */
+            background: rgba(229, 152, 50, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            height: 32px;
+        }
+        
+        .logo img {
+            height: 100%;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--text-dark);
+            opacity: 0.8;
+        }
+
+        .nav-links a:hover { opacity: 1; }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        .header-btn {
+            background: #fff;
+            color: var(--text-dark);
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+        }
+        .header-btn:hover { opacity: 0.9; }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            /* Exact orange color from Opti site */
+            background-color: var(--hero-orange);
+            padding: 60px 0 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden; 
+        }
+
+        /* Background Video for Hero (Orange Loop) */
+        .hero-bg-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6; 
+            mix-blend-mode: overlay;
+        }
+        
+        .hero-bg-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* "Reports" Pill */
+        .pill-container {
+            display: inline-flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 50px;
+            padding: 4px;
+            padding-right: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .pill-container:hover { transform: scale(1.02); }
+        
+        .pill-badge {
+            background: var(--accent-blue);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-right: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            max-width: 900px;
+            letter-spacing: -0.02em;
+            color: var(--text-dark);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            max-width: 650px;
+            margin-bottom: 32px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        
+        .hero-btns {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+
+        /* --- HERO VIDEO WRAPPER --- */
+        .hero-media {
+            width: 100%;
+            max-width: 1100px;
+            position: relative;
+            z-index: 2;
+            margin-top: 20px;
+        }
+
+        .hero-video-wrapper {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -10px rgba(0,0,0,0.2);
+            background: #000;
+            position: relative;
+        }
+
+        .hero-video-wrapper video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* --- INTRO SECTION (Beige) --- */
+        .intro {
+            background-color: var(--bg-beige);
+            padding: 120px 0 80px;
+            text-align: left;
+        }
+        
+        .intro-flex {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+        }
+        
+        .intro h2 {
+            font-size: 3.5rem;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            flex: 1;
+            color: var(--text-dark);
+        }
+        
+        .intro-text {
+            flex: 1;
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            opacity: 0.9;
+        }
+
+        /* --- FEATURES GRID (Updated for Blue Video BG) --- */
+        .features {
+            padding: 100px 0 120px;
+            background-color: #0b0a1a; 
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* New Background Video for Features Section */
+        .features-bg-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .features-bg-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .features .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            margin-bottom: 60px;
+            text-align: center;
+            color: #faf5ed; 
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .feature-card.large {
+            grid-column: span 2;
+            flex-direction: row;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .feature-content {
+            z-index: 2;
+            position: relative;
+        }
+
+        .feature-card h3 {
+            font-size: 2.2rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            color: var(--text-grey);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            max-width: 400px;
+        }
+
+        /* Specific Blue Button from Snippet */
+        .btn-feature {
+            background-color: rgb(12, 57, 200);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .btn-feature:hover { opacity: 0.9; }
+        
+        /* Video inside feature cards */
+        .feature-media {
+            flex-grow: 1;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 40px;
+            background: transparent; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .feature-card.large .feature-media {
+            margin-top: 0;
+            width: 50%;
+            height: 100%;
+        }
+        
+        .feature-media video {
+            width: 100%;
+            height: auto;
+            max-height: 350px;
+            object-fit: contain;
+        }
+
+        /* --- TRUST / SOCIAL PROOF --- */
+        .trust-section {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: var(--bg-beige);
+        }
+        
+        .trust-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-family: 'Clash Display', sans-serif;
+            color: var(--text-dark);
+        }
+        
+        .trust-subtitle {
+            margin-bottom: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.2rem;
+            color: var(--text-grey);
+        }
+        
+        .testimonial-block {
+            display: flex;
+            background: var(--hero-orange);
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 100px;
+            text-align: left;
+        }
+        
+        .testimonial-image {
+            flex: 1;
+            min-height: 400px;
+        }
+        
+        .testimonial-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .testimonial-content {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative; /* For positioning arrows if needed */
+        }
+        
+        .testimonial-quote {
+            font-size: 2.2rem;
+            line-height: 1.2;
+            font-family: 'Clash Display', sans-serif;
+            margin-bottom: 40px;
+            letter-spacing: -0.02em;
+        }
+        
+        .testimonial-author {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .testimonial-role {
+            font-weight: 400;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        /* Testimonial Navigation Buttons */
+        .testimonial-nav {
+            display: flex;
+            gap: 12px;
+            margin-top: 40px;
+        }
+
+        .nav-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            border: none;
+        }
+        
+        /* Dark orange/brown background for buttons based on snippet tokens */
+        .nav-btn.active {
+            background-color: rgb(200, 137, 61);
+            opacity: 1;
+        }
+        
+        .nav-btn.inactive {
+            background-color: rgb(200, 137, 61);
+            opacity: 0.4;
+        }
+
+        .nav-btn svg {
+            width: 12px;
+            height: 12px;
+            stroke: var(--text-dark);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* --- INTEGRATIONS SCROLL --- */
+        .integrations-section {
+            padding: 80px 0;
+            background: #fff;
+            overflow: hidden;
+        }
+        
+        .integrations-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .integrations-desc {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+            color: var(--text-grey);
+            font-size: 1.2rem;
+        }
+
+        .logo-marquee {
+            display: flex;
+            gap: 60px;
+            width: max-content;
+            animation: scroll 30s linear infinite;
+        }
+        
+        .logo-marquee img {
+            height: 60px;
+            width: auto;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .logo-marquee img:hover { opacity: 1; }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- CTA SECTION (NEW) --- */
+        .cta-section {
+            padding: 80px 0 120px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Styles mimicking the Framer structure provided */
+        .framer-1kpbne6 {
+            display: flex;
+            flex-direction: row;
+            background-color: var(--hero-orange);
+            border-radius: 58px;
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+            min-height: 600px;
+            overflow: hidden;
+            position: relative;
+            align-items: flex-end; /* Aligns cat image to bottom */
+        }
+
+        .framer-1qhpiut {
+            flex: 1;
+            height: 100%;
+            min-height: 600px;
+            position: relative;
+        }
+
+        .framer-1qhpiut img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: bottom center;
+            display: block;
+        }
+
+        .framer-14qap6h {
+            flex: 1;
+            padding: 80px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 40px;
+            z-index: 2;
+        }
+
+        .framer-1umlxiy h2 {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 4.5rem;
+            line-height: 1;
+            font-weight: 500;
+            color: var(--text-dark);
+            letter-spacing: -0.03em;
+        }
+
+        /* CTA Button Wrapper */
+        .framer-S4MNg {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 32px;
+            background: transparent;
+            border: 1px solid var(--text-dark);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .framer-S4MNg:hover {
+            background: rgba(19, 17, 50, 0.05);
+        }
+
+        .framer-rd6t41 p {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .framer-drw398 {
+            width: 24px;
+            height: 24px;
+        }
+
+        .framer-4e2cp3 svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--text-dark);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 80px 0 40px;
+            background-color: #fff;
+            color: var(--text-dark);
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-col h4 {
+            color: var(--text-dark);
+            margin-bottom: 24px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-col a {
+            color: var(--text-grey);
+            font-size: 0.95rem;
+        }
+        .footer-col a:hover { color: var(--text-dark); text-decoration: underline; }
+        
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 32px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.85rem;
+            color: var(--text-grey);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 2.8rem; }
+            .nav-links { display: none; } 
+            .mobile-menu-btn { display: block; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .feature-card.large { grid-column: auto; flex-direction: column; }
+            .feature-card.large .feature-media { width: 100%; margin-top: 30px; }
+            .intro-flex { flex-direction: column; gap: 30px; }
+            .intro h2 { font-size: 2.5rem; }
+            .testimonial-block { flex-direction: column; }
+            .testimonial-image { min-height: 250px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+            .footer-bottom { flex-direction: column; gap: 20px; text-align: center; }
+            
+            /* CTA Section Responsive */
+            .framer-1kpbne6 { flex-direction: column-reverse; height: auto; min-height: auto; align-items: center; }
+            .framer-1qhpiut { width: 100%; min-height: 300px; height: 300px; }
+            .framer-14qap6h { width: 100%; padding: 60px 30px 20px; text-align: center; align-items: center; }
+            .framer-1umlxiy h2 { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header data-aos="fade-down" data-aos-duration="600">
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <!-- Real Opti Logo URL -->
+                    <img src="https://framerusercontent.com/images/wOI45PlVjM7MMNeq0PRzZvDxQy0.svg" alt="Opti">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#">Platform</a></li>
+                    <li><a href="#">Solutions</a></li>
+                    <li><a href="#">Company</a></li>
+                    <li><a href="#">Resources</a></li>
+                </ul>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div class="mobile-menu-btn">☰</div>
+                    <a href="#" class="header-btn" style="font-weight: 600;">Book Demo</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <!-- Orange BG Video -->
+        <div class="hero-bg-video">
+            <video 
+                src="https://framerusercontent.com/assets/PBts74sqomtqFbO38BcP1xN70MI.mp4" 
+                loop 
+                muted 
+                playsinline 
+                autoplay>
+            </video>
+        </div>
+
+        <div class="container hero-content">
+            <!-- Pill -->
+            <div class="pill-container" data-aos="fade-up">
+                <span class="pill-badge">Reports</span>
+                Modernizing the identity stack >
+            </div>
+
+            <h1 data-aos="fade-up" data-aos-delay="100">Finally, an IAM tool that<br>gives you less to do</h1>
+            <p data-aos="fade-up" data-aos-delay="200">Opti is the AI-native IAM platform that revolutionizes how modern teams define, protect, and govern identities.</p>
+            
+            <div class="hero-btns" data-aos="fade-up" data-aos-delay="300">
+                <a href="#" class="btn btn-primary">Schedule a Demo</a>
+            </div>
+
+            <!-- Hero Video -->
+            <div class="hero-media" data-aos="fade-up" data-aos-delay="400">
+                <div class="hero-video-wrapper">
+                    <video 
+                        src="https://framerusercontent.com/assets/27Zn1jl933zbwV3WIcXOQDLiZMM.mp4" 
+                        loop 
+                        muted 
+                        playsinline 
+                        autoplay
+                        poster="https://framerusercontent.com/images/GPOhlopdzVcApwPQmU3Lfuq17EE.png?width=1400&amp;height=1100">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Intro / Problem Statement -->
+    <section class="intro">
+        <div class="container">
+            <div class="intro-flex">
+                <h2 data-aos="fade-up">Say hello to a new AI-first reality</h2>
+                <div class="intro-text" data-aos="fade-up" data-aos-delay="100">
+                    <p style="margin-bottom: 20px;">Growing attack surfaces, rubber-stamped access, and manual processes leave organizations exposed and inefficient. <strong>The result? 80% of breaches involve compromised or abused identities.</strong></p>
+                    <p>AI models purpose-built for IAM can now address these legacy challenges. Powered by a context-aware engine that continuously analyzes access behavior and risk across every identity and application.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section (Platform) -->
+    <section class="features">
+        <!-- Background Video from Snippet -->
+        <div class="features-bg-video">
+            <video 
+                src="https://framerusercontent.com/assets/cWqn20dVB1GEoI0UXjkQstzKUU0.mp4" 
+                loop 
+                muted 
+                playsinline 
+                autoplay
+                style="width: 100%; height: 100%; object-fit: cover;">
+            </video>
+        </div>
+
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">The Opti advantage</h2>
+            
+            <div class="feature-grid">
+                <!-- Feature 1: Understand Access -->
+                <div class="feature-card large" data-aos="fade-up">
+                    <div class="feature-content" style="max-width: 450px;">
+                        <h3>Understand access<br>like never before</h3>
+                        <p>Opti’s AI-powered identity fabric provides unprecedented visibility across your entire environment, ingesting, normalizing, and analyzing all identities - human, non-human and agentic - across all your applications and security tools.</p>
+                        <a href="#" class="btn-feature">Learn More</a>
+                    </div>
+                    <div class="feature-media">
+                        <video 
+                            src="https://framerusercontent.com/assets/n7AFWESOmOnstyxX0NQzrdu0PQ.mp4" 
+                            loop 
+                            muted 
+                            playsinline 
+                            autoplay>
+                        </video>
+                    </div>
+                </div>
+                
+                <!-- Feature 2: Risk Mitigation -->
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-content">
+                        <h3>Don't just flag risk.<br>Remediate it.</h3>
+                        <p>Our specialized entitlement models understand and analyze a wide context to discover risky access or excessive privileges, while our identity workflow engine builds tailored, automated policies and remediation plans that transform identity risks into resolved outcomes.</p>
+                        <a href="#" class="btn-feature">Learn More</a>
+                    </div>
+                    <div class="feature-media">
+                         <video 
+                            src="https://framerusercontent.com/assets/RpqP7ODmkzDhiDENkMUzFhAQ438.mp4" 
+                            loop 
+                            muted 
+                            playsinline 
+                            autoplay>
+                        </video>
+                    </div>
+                </div>
+                
+                <!-- Feature 3: Lifecycle Management -->
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-content">
+                        <h3>Govern smarter<br>with or without an IGA</h3>
+                        <p>No more rubber-stamping thanks to Opti's rich analytics, fusing intelligence into your lifecycle and governance processes and fitting seamlessly into any environment. Enhance JML workflows and replace guesswork with AI-driven recommendations and automation.</p>
+                        <a href="#" class="btn-feature">Learn More</a>
+                    </div>
+                    <div class="feature-media">
+                        <video 
+                            src="https://framerusercontent.com/assets/hlRbHpZxShkEa2Sz0KH5Tn2yVhg.mp4" 
+                            loop 
+                            muted 
+                            playsinline 
+                            autoplay>
+                        </video>
+                    </div>
+                </div>
+                
+                <!-- Feature 4: Compliance (Large) -->
+                <div class="feature-card large" data-aos="fade-up">
+                    <div class="feature-content" style="max-width: 450px;">
+                        <h3>Demonstrate compliance<br>without the chaos</h3>
+                        <p>Audits don’t have to be a fire drill. Opti continuously aggregates identity, access, and entitlement data and maps it to roles, policies, and usage. Governance becomes more streamlined and actionable.</p>
+                        <a href="#" class="btn-feature">Learn More</a>
+                    </div>
+                    <div class="feature-media">
+                        <video 
+                            src="https://framerusercontent.com/assets/hstIRHtTbPzGb6SfIOVM3SowOw.mp4" 
+                            loop 
+                            muted 
+                            playsinline 
+                            autoplay>
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust-section">
+        <div class="container">
+            <h2 class="trust-title" data-aos="fade-up">Why security leaders trust Opti</h2>
+            
+            <div class="testimonial-block" data-aos="fade-up">
+                <div class="testimonial-image">
+                    <!-- Image removed to reveal hero color background -->
+                </div>
+                <div class="testimonial-content">
+                    <!-- Updated Quote -->
+                    <p class="testimonial-quote">"Opti becomes our modern identity governance control plane and allows us to reduce risk in a measurable way."</p>
+                    <div>
+                        
+                        <p class="testimonial-role">CISO, WeightWatchers</p>
+                    </div>
+
+                    <!-- Added Navigation Arrows -->
+                    <div class="testimonial-nav">
+                        <div class="nav-btn inactive">
+                            <svg viewBox="0 0 6 11">
+                                <path d="M 5.5 0 L 0 5.25 L 5.5 10.5"></path>
+                            </svg>
+                        </div>
+                        <div class="nav-btn active">
+                            <svg viewBox="0 0 6 11">
+                                <path d="M 0 0 L 5.5 5.25 L 0 10.5"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Integrations (Real Logos) -->
+    <section class="integrations-section">
+        <div class="container">
+            <h2 class="integrations-title">We integrate with everything</h2>
+            <p class="integrations-desc">From IdP to IGA to everything in between. Opti deploys in hours and integrates with your existing identity solutions and business applications.</p>
+            
+            <div class="logo-marquee">
+                <!-- Using actual SVG URLs extracted from the source -->
+                <img src="https://framerusercontent.com/images/godO8hyTiirai60yVaREwNuuFM.svg?width=150&height=150" alt="AWS">
+                <img src="https://framerusercontent.com/images/tW78lxcJgdXpnLlXHTv9N3f0kTA.svg?width=720&height=720" alt="Azure">
+                <img src="https://framerusercontent.com/images/QQrSzJRQhXTvJAb2OZ4RDpfM7LY.svg?width=512&height=512" alt="Google Cloud">
+                <img src="https://framerusercontent.com/images/5aqRFrMhlmosuxygWRWVD0rro.svg?width=103&height=107" alt="Okta">
+                <img src="https://framerusercontent.com/images/355GRwvBHwFZO2gPVYpcssKLBc.svg?width=79&height=70" alt="Auth0">
+                <img src="https://framerusercontent.com/images/UUr8dPOMPy5mem0P91gvDECB0.svg?width=1547&height=1623" alt="Ping">
+                <img src="https://framerusercontent.com/images/q1xaKPvPQYt0H3s0xC9XkUxDJKc.svg?width=1583&height=1107" alt="SailPoint">
+                <img src="https://framerusercontent.com/images/TgybmOiIm6Fh8CWNAXkTwAPkpM.svg?width=64&height=64" alt="Slack">
+                <img src="https://framerusercontent.com/images/o81yqmDnQWEyFgOF1LDsXu5pkrE.svg?width=1583&height=1588" alt="GitHub">
+                <!-- Duplicate for marquee effect -->
+                <img src="https://framerusercontent.com/images/godO8hyTiirai60yVaREwNuuFM.svg?width=150&height=150" alt="AWS">
+                <img src="https://framerusercontent.com/images/tW78lxcJgdXpnLlXHTv9N3f0kTA.svg?width=720&height=720" alt="Azure">
+                <img src="https://framerusercontent.com/images/QQrSzJRQhXTvJAb2OZ4RDpfM7LY.svg?width=512&height=512" alt="Google Cloud">
+                <img src="https://framerusercontent.com/images/5aqRFrMhlmosuxygWRWVD0rro.svg?width=103&height=107" alt="Okta">
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW CTA SECTION (Matches Snippet) -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="framer-1kpbne6" data-framer-name="frame" style="background-color: var(--hero-orange); border-radius: 58.16px; opacity: 1;">
+                <div class="framer-1qhpiut" data-framer-name="Group 32" style="opacity: 1;">
+                    <div data-framer-background-image-wrapper="true" style="position: absolute; border-radius: inherit; corner-shape: inherit; inset: 0px;">
+                        <img decoding="auto" loading="lazy" width="697" height="917" sizes="488px" srcset="https://framerusercontent.com/images/FzFifRrwPnSOudBu52j3tbykllg.png?width=697&amp;height=917 697w" src="https://framerusercontent.com/images/FzFifRrwPnSOudBu52j3tbykllg.png?width=697&amp;height=917" alt="A blue cartoon cat with large yellow eyes stares upward at a floating cotton swab above its head, against a simple, light-colored background." style="display: block; width: 100%; height: 100%; border-radius: inherit; corner-shape: inherit; object-position: center center; object-fit: contain;">
+                    </div>
+                </div>
+                <div class="framer-14qap6h" style="opacity: 1;">
+                    <div class="framer-1umlxiy" data-framer-name="Ready for a New IAM Reality?" data-framer-component-type="RichTextContainer" style="--extracted-r6o4lv: var(--text-dark); --framer-paragraph-spacing: 0px; transform: none; opacity: 1;">
+                        <p class="framer-text" style="font-family: 'Clash Display', sans-serif; font-size: 88.86px; font-weight: 500; letter-spacing: -0.03em; line-height: 81.96px; color: var(--text-dark);">
+                            Ready for <br class="framer-text">a new IAM reality?
+                        </p>
+                    </div>
+                    <div class="framer-lpte2b-container" style="opacity: 1;">
+                        <a class="framer-S4MNg framer-1c1bbz framer-v-10sagpt framer-1stv98s" data-border="true" data-framer-name="dark" data-highlight="true" href="./book-demo" target="_blank" tabindex="0">
+                            <div class="framer-rd6t41" data-framer-name="Learn more" data-framer-component-type="RichTextContainer">
+                                <p class="framer-text">Book a Demo</p>
+                            </div>
+                            <div class="framer-drw398" style="opacity: 1; transform: translateX(-0.545887px); will-change: transform;">
+                                <div data-framer-component-type="SVG" data-framer-name="graphic.svg" class="framer-4e2cp3" aria-hidden="true">
+                                    <div class="svgContainer">
+                                        <svg style="width:100%;height:100%;"><use href="#svg10427506436"></use></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="#" class="logo">
+                        <img src="https://framerusercontent.com/images/9tsoW68LNnWyfKSdkOhK8UhNTQ.svg" alt="Opti" style="height: 28px;">
+                    </a>
+                    <br><br>
+                    <p style="max-width: 200px; color: var(--text-grey);">Defining the future of identity security.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="#">Access Intelligence</a></li>
+                        <li><a href="#">Risk Mitigation</a></li>
+                        <li><a href="#">Lifecycle Management</a></li>
+                        <li><a href="#">Integrations</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Partners</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Whitepapers</a></li>
+                        <li><a href="#">Trust Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Opti, Inc.</p>
+                <div style="display: flex; gap: 24px;">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SVG Templates -->
+    <div id="svg-templates" style="position: absolute; overflow: hidden; bottom: 0; left: 0; width: 0; height: 0; z-index: 0; contain: strict" aria-hidden="true">
+        <svg viewBox="0 0 22 23" id="svg10427506436"><path d="M 12.726 17.038 L 11.456 15.724 L 14.674 12.507 L 3.664 12.507 L 3.664 10.695 L 14.674 10.695 L 11.457 7.478 L 12.725 6.164 L 18.162 11.601 Z" fill="var(--token-7eeb5bce-ca81-42aa-9b1f-962c8349e802, rgb(19, 17, 50))"></path></svg>
+    </div>
+
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            offset: 50,
+            duration: 800,
+            easing: 'ease-out-cubic',
+        });
+    </script>
+</body>
+</html>
